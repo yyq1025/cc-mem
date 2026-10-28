@@ -12,7 +12,7 @@
     },
     "packages/core": {
       "name": "@cc-mem/core",
-      "version": "0.2.1",
+      "version": "0.2.2",
       "bin": {
         "cc-mem": "./dist/cli.js",
       },
@@ -22,7 +22,7 @@
     },
     "packages/dsh": {
       "name": "@cc-mem/dsh",
-      "version": "0.2.1",
+      "version": "0.2.2",
       "dependencies": {
         "@cc-mem/core": "workspace:*",
       },
@@ -41,7 +41,7 @@
     },
     "packages/opencode": {
       "name": "@cc-mem/opencode",
-      "version": "0.2.1",
+      "version": "0.2.2",
       "dependencies": {
         "@cc-mem/core": "workspace:*",
         "@opencode/plugin": "^2.2.0",
@@ -49,7 +49,7 @@
     },
     "packages/pi": {
       "name": "@cc-mem/pi",
-      "version": "0.2.1",
+      "version": "0.2.2",
       "dependencies": {
         "@cc-mem/core": "workspace:*",
       },

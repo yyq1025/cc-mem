@@ -1,6 +1,6 @@
 {
   "name": "@cc-mem/opencode",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Claude Code's auto memory in OpenCode: the index in every request, and tools to write and edit it",
   "license": "MIT",
   "repository": {
