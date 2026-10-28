@@ -51,7 +51,7 @@ const steps = calls.map(({ name, input }) => {
   return fileTools.has(name) || writes.test(command) ? `${name}[writes memory]` : `${name}[reads memory]`
 })
 
-const seed = new Set(readdirSync(join(here, "seed")))
+const seed = new Set(meta.seed === "empty" ? [] : readdirSync(join(here, "seed")))
 const now = readdirSync(join(out, "memory")).filter((f) => f.endsWith(".md"))
 const index = existsSync(join(out, "memory", "MEMORY.md")) ? readFileSync(join(out, "memory", "MEMORY.md"), "utf8") : ""
 const changed = now.filter((f) => seed.has(f) && readFileSync(join(out, "memory", f), "utf8") !== readFileSync(join(here, "seed", f), "utf8"))

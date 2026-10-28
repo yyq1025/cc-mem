@@ -23,6 +23,8 @@ die() { echo "run.sh: $*" >&2; exit 2; }
 case $agent in pi | opencode | dsh) ;; *) die "agent must be pi, opencode or dsh" ;; esac
 prompt=$(awk -F'\t' -v s="$scenario" '$1 == s { print $2 }' "$here/scenarios.tsv")
 [ -n "$prompt" ] || die "unknown scenario '$scenario'; see scenarios.tsv"
+# A third column of "empty" starts the run with no memory at all.
+seed=$(awk -F'\t' -v s="$scenario" '$1 == s { print ($3 == "" ? "seed" : $3) }' "$here/scenarios.tsv")
 [ -n "${CC_MEM_TEST_API_KEY:-}" ] || die "set CC_MEM_TEST_API_KEY to an OpenCode Go API key"
 model=${CC_MEM_TEST_MODEL:-deepseek-v4.1-flash}
 
@@ -38,8 +40,9 @@ limited() { if command -v timeout > /dev/null; then timeout 300 "$@"; else "$@";
 root=$(mktemp -d "${TMPDIR:-/tmp}/cc-mem-behavior.XXXXXX")
 cleanup() { [ -n "$root" ] && [ -d "$root" ] && rm -rf "$root"; }
 trap cleanup EXIT
-mkdir -p "$root/memory" "$root/project"
-cp -R "$here/seed/." "$root/memory/"
+mkdir -p "$root/project"
+# With no seed the memory directory does not exist yet; the first write makes it.
+[ "$seed" = empty ] || { mkdir -p "$root/memory" && cp -R "$here/seed/." "$root/memory/"; }
 cp -R "$here/project/." "$root/project/"
 export CLAUDE_COWORK_MEMORY_PATH_OVERRIDE="$root/memory"
 
@@ -107,7 +110,8 @@ EOF
   ;;
 esac
 
-cp -R "$root/memory" "$out/memory"
-printf '{"agent":"%s","scenario":"%s","from":"%s","version":"%s","model":"%s","root":"%s","exit":%d}\n' \
-  "$agent" "$scenario" "$from" "$version" "$model" "$root" "$status" > "$out/meta.json"
+mkdir -p "$out/memory"
+[ -d "$root/memory" ] && cp -R "$root/memory/." "$out/memory/"
+printf '{"agent":"%s","scenario":"%s","seed":"%s","from":"%s","version":"%s","model":"%s","root":"%s","exit":%d}\n' \
+  "$agent" "$scenario" "$seed" "$from" "$version" "$model" "$root" "$status" > "$out/meta.json"
 node "$here/analyze.mjs" "$out" || true

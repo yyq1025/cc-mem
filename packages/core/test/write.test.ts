@@ -42,6 +42,15 @@ test("memory_write creates MEMORY.md only when there is none, without frontmatte
   expect(() => writeMemory(ctx, "MEMORY.md", "- x\n")).toThrow(/already exists/)
 })
 
+test("memory_write says to create MEMORY.md for a project's first note", () => {
+  const { loc, ctx } = setup("")
+  const result = writeMemory(ctx, "user_role.md", memory("user-role", "The user is a data scientist", "user"))
+  expect(existsSync(loc.entrypoint)).toBe(false)
+  expect(result.message).toBe(
+    "Saved user_role.md. MEMORY.md does not exist yet: create it with memory_write, starting with its line, such as: - [Title](user_role.md) — The user is a data scientist",
+  )
+})
+
 test("memory_write never overwrites", () => {
   const { ctx } = setup()
   writeMemory(ctx, "a.md", memory("a", "A", "project"))

@@ -39,6 +39,9 @@ The API key reaches each agent through an environment variable and is never writ
 | S3 | Use bun, not npm; note it down | a feedback memory, or the existing one updated |
 | S4 | Read the first line of README.md | no memory write |
 | S5 | Delete a memory that belongs to another project | `memory_delete`, then the index line removed |
+| S6 | S1 with no memory directory at all | the first note, then `MEMORY.md` created with `memory_write` |
+
+A third column of `empty` in `scenarios.tsv` starts the run without the seed, and without the memory directory.
 
 ## Results
 

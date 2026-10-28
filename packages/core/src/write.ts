@@ -57,7 +57,12 @@ export function writeMemory(ctx: WriteContext, fileName: string, content: string
     const stamp = (ctx.now ?? (() => new Date()))().toISOString()
     writeAtomic(path, setMetadata(content, { source: ctx.source, modified: stamp }))
     const pointer = `- [Title](${fileName}) — ${oneLine(memory.description)}`
-    return { path, message: `Saved ${fileName}. Add its line to MEMORY.md, such as: ${pointer}${contentNotes(content, memory)}` }
+    // The first note of a project: say so, or the agent tries memory_edit on
+    // an index that does not exist.
+    const next = existsSync(location.entrypoint)
+      ? `Add its line to MEMORY.md, such as: ${pointer}`
+      : `MEMORY.md does not exist yet: create it with memory_write, starting with its line, such as: ${pointer}`
+    return { path, message: `Saved ${fileName}. ${next}${contentNotes(content, memory)}` }
   })
 }
 
