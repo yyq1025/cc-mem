@@ -9,7 +9,7 @@ scripts/behavior/run.sh pi S5
 scripts/behavior/run.sh opencode S2 --npm
 ```
 
-Agents: `pi`, `opencode`, `dsh` (DeepSeek Harness), and `claude`, Claude Code itself as the baseline. Without `--npm` the plugin loads from this checkout; with it, the published version is installed into the run, pinned so a stale npm or pnpm cache cannot serve an older one.
+Agents: `pi`, `opencode` and `dsh` (DeepSeek Harness). Without `--npm` the plugin loads from this checkout; with it, the published version is installed into the run, pinned so a stale npm or pnpm cache cannot serve an older one.
 
 ## Isolation
 
@@ -22,7 +22,6 @@ Each run gets a temporary root holding everything it touches, and the root is re
 | pi | `PI_CODING_AGENT_DIR`, with `--no-session` |
 | OpenCode | `XDG_DATA_HOME`, `XDG_CONFIG_HOME`, `XDG_CACHE_HOME` and `XDG_STATE_HOME`: sessions, config, and npm plugins. Your own `~/.config/opencode` is not read |
 | DeepSeek Harness | `DSH_HOME`: profiles, sessions and caches |
-| Claude Code | `--no-session-persistence`, without Bash |
 
 The API key reaches each agent through an environment variable and is never written to a file. Your own sessions, settings and memory are left as they were. pnpm's and npm's download caches are shared, as they are only caches.
 

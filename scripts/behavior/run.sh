@@ -4,12 +4,12 @@
 # caches all live under it, and it is removed when the run ends. Only the
 # results directory is kept.
 #
-#   scripts/behavior/run.sh <pi|opencode|dsh|claude> <scenario> [--npm]
+#   scripts/behavior/run.sh <pi|opencode|dsh> <scenario> [--npm]
 #
 # --npm installs the published plugin instead of loading the checkout.
-# CC_MEM_TEST_API_KEY must hold an OpenCode Go API key (not needed for
-# claude). CC_MEM_TEST_MODEL overrides the model, CC_MEM_TEST_VERSION the
-# npm version, and CC_MEM_DSH the path of the dsh binary.
+# CC_MEM_TEST_API_KEY must hold an OpenCode Go API key. CC_MEM_TEST_MODEL
+# overrides the model, CC_MEM_TEST_VERSION the npm version, and CC_MEM_DSH
+# the path of the dsh binary.
 set -euo pipefail
 
 here=$(cd "$(dirname "$0")" && pwd)
@@ -20,10 +20,10 @@ from=repo
 [ "${3:-}" = --npm ] && from=npm
 
 die() { echo "run.sh: $*" >&2; exit 2; }
-case $agent in pi | opencode | dsh | claude) ;; *) die "agent must be pi, opencode, dsh or claude" ;; esac
+case $agent in pi | opencode | dsh) ;; *) die "agent must be pi, opencode or dsh" ;; esac
 prompt=$(awk -F'\t' -v s="$scenario" '$1 == s { print $2 }' "$here/scenarios.tsv")
 [ -n "$prompt" ] || die "unknown scenario '$scenario'; see scenarios.tsv"
-[ "$agent" = claude ] || [ -n "${CC_MEM_TEST_API_KEY:-}" ] || die "set CC_MEM_TEST_API_KEY to an OpenCode Go API key"
+[ -n "${CC_MEM_TEST_API_KEY:-}" ] || die "set CC_MEM_TEST_API_KEY to an OpenCode Go API key"
 model=${CC_MEM_TEST_MODEL:-deepseek-v4.1-flash}
 
 # Pin the published version, so a stale npm or pnpm metadata cache cannot
@@ -103,13 +103,6 @@ EOF
     printf -- '- insert:\n    - id: cc-mem\n      name: "%s"\n' "$repo/packages/dsh/dist/index.js" >> "$patch"
   fi
   limited "$dsh" headless --patch "$patch" --json "$prompt" \
-    < /dev/null > "$out/events.jsonl" 2> "$out/stderr.log" || status=$?
-  ;;
-claude)
-  # Claude Code itself, as the baseline: its own memory tools are Write and
-  # Edit; Bash stays off so it cannot touch anything else.
-  limited claude -p "$prompt" --model "${CC_MEM_TEST_CLAUDE_MODEL:-haiku}" --no-session-persistence \
-    --output-format stream-json --verbose --allowedTools Read Write Edit Glob Grep --disallowedTools Bash \
     < /dev/null > "$out/events.jsonl" 2> "$out/stderr.log" || status=$?
   ;;
 esac

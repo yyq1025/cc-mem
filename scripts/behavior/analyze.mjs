@@ -37,14 +37,10 @@ for (const e of events) {
   if (meta.agent === "opencode" && e.part?.type === "text") answer = e.part.text ?? answer
   if (meta.agent === "dsh" && e.type === "tool_call") calls.push({ name: e.tool, input: e.input ?? {} })
   if (meta.agent === "dsh" && (e.type === "final" || e.type === "text")) answer = e.text ?? answer
-  if (meta.agent === "claude" && e.type === "assistant") {
-    for (const c of e.message?.content ?? []) if (c.type === "tool_use") calls.push({ name: c.name, input: c.input ?? {} })
-  }
-  if (meta.agent === "claude" && e.type === "result") answer = e.result ?? answer
 }
 
 const memoryDir = join(meta.root, "memory")
-const fileTools = new Set(["write", "edit", "Write", "Edit", "patch", "apply_patch"])
+const fileTools = new Set(["write", "edit", "patch", "apply_patch"])
 // A redirect into a file, not 2> or >&.
 const writes = /\b(rm|mv|cp|tee|python3?|perl|sed -i)\b|(^|[^0-9&])>\s*[^&\s]/
 const steps = calls.map(({ name, input }) => {
