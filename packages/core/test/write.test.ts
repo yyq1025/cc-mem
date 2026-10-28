@@ -1,9 +1,9 @@
-import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs"
+import { existsSync, readFileSync, writeFileSync } from "node:fs"
 import { dirname, join } from "node:path"
 import { expect, test } from "vitest"
 import { parseMemory } from "../src/frontmatter.js"
 import { resolveLocation } from "../src/paths.js"
-import { editMemory, MemoryError, writeMemory, type WriteContext } from "../src/write.js"
+import { deleteMemory, editMemory, MemoryError, writeMemory, type WriteContext } from "../src/write.js"
 import { mkdir, testEnv, writeFile } from "./helpers.js"
 
 function setup(index = "- [Old note](old.md) — kept as written\n") {
@@ -98,17 +98,16 @@ test("results flag what Claude Code would: recall limits and long descriptions",
   expect(wordy.message).toContain("The description is 301 characters")
 })
 
-test("memory_edit edits MEMORY.md with a backup and flags missing files and the index limits", () => {
+test("memory_edit edits MEMORY.md and flags missing files and the index limits", () => {
   const { loc, ctx } = setup("- x\n".repeat(199) + "- last\n")
   const result = editMemory(ctx, "MEMORY.md", { oldString: "- last\n", newString: "- last\n- [Gone](gone.md) — g\n" })
   expect(result.message).toContain("loads only its first 200 lines")
   expect(result.message).toContain("links files that do not exist: gone.md")
   expect(read(loc.entrypoint).split("\n").length).toBe(202)
-  expect(readdirSync(join(dirname(loc.dir), ".cc-mem-trash"))[0]).toMatch(/MEMORY\.md$/)
   expect(() => editMemory(ctx, "MEMORY.md", { newFileName: "INDEX.md" })).toThrow(/keeps its name/)
 })
 
-test("memory_edit replaces once, backs up the old version and keeps the index line", () => {
+test("memory_edit replaces once, stamps the editor and keeps the index line", () => {
   const { env, loc, ctx } = setup()
   writeMemory(ctx, "a.md", memory("a", "Where the user lives", "user", "Lives in Oregon."))
   const indexBefore = read(loc.entrypoint)
@@ -120,10 +119,7 @@ test("memory_edit replaces once, backs up the old version and keeps the index li
   expect(saved).toContain("modifiedBy: pi")
   expect(result.message).toBe("Edited a.md.")
   expect(read(loc.entrypoint)).toBe(indexBefore)
-  const trash = join(dirname(loc.dir), ".cc-mem-trash")
-  const backups = readdirSync(trash)
-  expect(backups).toHaveLength(1)
-  expect(read(join(trash, backups[0]!))).toContain("Lives in Oregon.")
+  expect(existsSync(join(dirname(loc.dir), ".cc-mem-trash"))).toBe(false)
 })
 
 test("memory_edit points out an index line whose description changed", () => {
@@ -196,8 +192,6 @@ test("memory_edit renames a file and says MEMORY.md still links the old name", (
   expect(existsSync(join(loc.dir, "user_location_oregon.md"))).toBe(false)
   expect(read(join(loc.dir, "user_location.md"))).toContain("Lives in Vermont.")
   expect(read(loc.entrypoint)).toBe("- [Where I live](user_location_oregon.md) — a title the user wrote\n")
-  const trash = join(dirname(loc.dir), ".cc-mem-trash")
-  expect(readdirSync(trash)[0]).toMatch(/user_location_oregon\.md$/)
 })
 
 test("memory_edit renames without editing, and never onto an existing file", () => {
@@ -208,4 +202,26 @@ test("memory_edit renames without editing, and never onto an existing file", () 
   expect(editMemory(ctx, "a.md", { newFileName: "c.md" }).message).toBe("Renamed a.md to c.md.")
   expect(() => editMemory(ctx, "c.md", { newFileName: "MEMORY.md" })).toThrow(/keeps its name/)
   expect(() => editMemory(ctx, "c.md", {})).toThrow(/Give old_string/)
+})
+
+test("memory_delete deletes one memory file and says MEMORY.md still links it", () => {
+  const { loc, ctx } = setup("- [Old note](old.md) — kept as written\n- [A](a.md) — a\n")
+  writeMemory(ctx, "a.md", memory("a", "A", "user"))
+  expect(deleteMemory(ctx, "a.md").message).toBe("Deleted a.md. MEMORY.md still links a.md: remove that line with memory_edit.")
+  expect(existsSync(join(loc.dir, "a.md"))).toBe(false)
+  writeMemory(ctx, "b.md", memory("b", "B", "user"))
+  expect(deleteMemory(ctx, "b.md").message).toBe("Deleted b.md.")
+})
+
+test.each([
+  ["MEMORY.md", /cannot be deleted/],
+  ["missing.md", /does not exist/],
+  ["../a.md", /file name ending in \.md/],
+  ["*.md", /does not exist/],
+])("memory_delete refuses %s", (name, error) => {
+  const { loc, ctx } = setup()
+  writeMemory(ctx, "a.md", memory("a", "A", "user"))
+  expect(() => deleteMemory(ctx, name)).toThrow(error)
+  expect(existsSync(loc.entrypoint)).toBe(true)
+  expect(existsSync(join(loc.dir, "a.md"))).toBe(true)
 })

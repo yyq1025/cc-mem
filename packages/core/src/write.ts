@@ -1,10 +1,10 @@
 // Writes to Claude Code's memory directory under the rules in
-// docs/design.md: format checks, provenance and a backup before every edit.
-// MEMORY.md is the agent's to maintain, as it is
-// for Claude Code's own model; results remind it where the index needs a
-// change, the way Claude Code's checks after a memory write do.
-import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync } from "node:fs"
-import { basename, dirname, join } from "node:path"
+// docs/design.md: format checks, provenance, and one named file at a time.
+// MEMORY.md is the agent's to maintain, as it is for Claude Code's own
+// model; results remind it where the index needs a change, the way Claude
+// Code's checks after a memory write do.
+import { existsSync, readdirSync, readFileSync, rmSync } from "node:fs"
+import { basename, join } from "node:path"
 import { writeAtomic, withLock } from "./files.js"
 import { frontmatterMaxLines, memoryTypes, parseMemory, setMetadata, type Memory } from "./frontmatter.js"
 import { readIndex } from "./index-file.js"
@@ -106,7 +106,6 @@ export function editMemory(ctx: WriteContext, fileName: string, edit: Edit): Wri
 
     if (isIndex(fileName)) {
       checkIndex(edited)
-      backup(ctx, location, fileName)
       writeAtomic(path, edited)
       return { path, message: `Edited ${fileName}.${indexNotes(location)}` }
     }
@@ -114,7 +113,6 @@ export function editMemory(ctx: WriteContext, fileName: string, edit: Edit): Wri
     // A file Claude Code wrote may only parse with its quoting fallback;
     // the edit keeps it as editable as it was.
     const after = checkContent(edited, before?.strict ?? true)
-    backup(ctx, location, fileName)
     const stamp = (ctx.now ?? (() => new Date()))().toISOString()
     writeAtomic(target, setMetadata(edited, { modifiedBy: ctx.source, modified: stamp }))
     if (target !== path) rmSync(path)
@@ -126,6 +124,22 @@ export function editMemory(ctx: WriteContext, fileName: string, edit: Edit): Wri
       message += ` Its line in MEMORY.md may need the new description.`
     }
     return { path: target, message: message + contentNotes(edited, after) }
+  })
+}
+
+// deleteMemory removes one memory file. MEMORY.md cannot be deleted: it is
+// the index Claude Code loads, and the agent edits it instead.
+export function deleteMemory(ctx: WriteContext, fileName: string): WriteResult {
+  const location = writableLocation(ctx)
+  checkFileName(fileName)
+  if (isIndex(fileName)) throw new MemoryError("MEMORY.md is the index and cannot be deleted; remove lines from it with memory_edit.")
+  const path = join(location.dir, fileName)
+  return withLock(location.dir, () => {
+    if (!existsSync(path)) throw new MemoryError(`${fileName} does not exist.`)
+    rmSync(path)
+    const index = existsSync(location.entrypoint) ? readFileSync(location.entrypoint, "utf8") : ""
+    const note = index.includes(`](${fileName})`) ? ` MEMORY.md still links ${fileName}: remove that line with memory_edit.` : ""
+    return { path, message: `Deleted ${fileName}.${note}` }
   })
 }
 
@@ -215,14 +229,4 @@ function indexNotes(location: Location): string {
     .filter((f) => !f.includes("/") && !existsSync(join(location.dir, f)))
   if (missing.length > 0) notes += ` MEMORY.md links files that do not exist: ${[...new Set(missing)].join(", ")}.`
   return notes
-}
-
-// backup copies a file before an edit into a trash directory beside the
-// memory directory, outside what Claude Code reads, so backups follow the
-// memory wherever it is configured to live.
-function backup(ctx: WriteContext, location: Location, fileName: string): void {
-  const stamp = (ctx.now ?? (() => new Date()))().toISOString().replace(/[:.]/g, "-")
-  const trash = join(dirname(location.dir), ".cc-mem-trash")
-  mkdirSync(trash, { recursive: true })
-  copyFileSync(join(location.dir, fileName), join(trash, `${stamp}-${fileName}`))
 }

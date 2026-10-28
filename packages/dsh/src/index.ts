@@ -1,6 +1,6 @@
 // Puts Claude Code's memory index for each session's working directory into
 // DeepSeek Harness's runtime context, and registers tools to list another
-// directory's notes and to write and edit the session directory's. The
+// directory's notes and to write, edit and delete the session directory's. The
 // context provider runs at each assembly, and Harness logs a new snapshot
 // only when the text changes, so notes saved during the session show up.
 //
@@ -13,6 +13,8 @@ import type {} from "@deepseek-ai/dsh-system-prompt"
 import { defineTool } from "@deepseek-ai/dsh-tools"
 import type {} from "@deepseek-ai/dsh-working-directory"
 import {
+  deleteDescription,
+  deleteMemory,
   editDescription,
   editMemory,
   fileNameDescription,
@@ -104,6 +106,20 @@ export function apply(ctx: Context) {
           replaceAll: args.replace_all,
           newFileName: args.new_file_name,
         }).message
+      },
+    }),
+  )
+
+  ctx.tools.register(
+    defineTool({
+      name: "memory_delete",
+      description: deleteDescription,
+      parameters: {
+        file_name: { type: "string", required: true, description: fileNameDescription },
+      },
+      output: text,
+      async execute(args, exec) {
+        return deleteMemory({ env, project: sessionDirectory(exec), source }, args.file_name).message
       },
     }),
   )

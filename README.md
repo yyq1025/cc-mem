@@ -11,9 +11,9 @@ Claude Code saves what it learns about you and your project to `~/.claude/projec
 - **Careful writes.**
   - `memory_write` creates a file and never overwrites one.
   - `memory_edit` makes one exact replacement and can rename a file.
-  - Every edit first copies the old version into `.cc-mem-trash`, beside the memory directory and outside what Claude Code reads.
+  - `memory_delete` removes one named memory file at a time and never `MEMORY.md`, so a mistaken delete cannot take the index or the whole directory with it.
   - Each file records which agent wrote or last changed it (`metadata.source`, `modifiedBy`) and when.
-  - There is no delete: merging and retiring memories is left to Claude Code's own consolidation.
+  - No backups, as in Claude Code: a project's memory is small, and what is lost can be asked again or read back from the code.
 - **Small.** About 1,100 tokens of fixed instructions and tool descriptions per request, plus your index, which Claude Code loads too. No extra model calls, database or background process.
 
 ## Install
@@ -33,6 +33,7 @@ Start a new session afterwards. Claude Code needs nothing: it already reads and 
 | `memory_list(project)` | Returns the notes for another project directory; the working directory's are already in the prompt |
 | `memory_write(file_name, content)` | Creates a memory file, or `MEMORY.md` when there is none |
 | `memory_edit(file_name, old_string?, new_string?, replace_all?, new_file_name?)` | Replaces text exactly in a memory file or `MEMORY.md`, renames a memory file, or both |
+| `memory_delete(file_name)` | Deletes one memory file; `MEMORY.md` cannot be deleted |
 
 Agents read memory files with their own file tools. They maintain `MEMORY.md` themselves, one line per memory, as Claude Code's model does.
 
@@ -56,7 +57,7 @@ npx @cc-mem/core index --project <dir>
 
 ## Status
 
-Version 0.1.1, on npm under [`@cc-mem`](https://www.npmjs.com/org/cc-mem). Tested with pi 1.4.0, OpenCode 2.2.0 and DeepSeek Harness 0.2.1-rc.3 running DeepSeek V4.1 Flash, against Claude Code 2.1.312. The design, and how each agent behaved in the tests, are in [docs/design.md](docs/design.md). An earlier version was a Go MCP server.
+Version 0.2.0, on npm under [`@cc-mem`](https://www.npmjs.com/org/cc-mem). Tested with pi 1.4.0, OpenCode 2.2.0 and DeepSeek Harness 0.2.1-rc.3 running DeepSeek V4.1 Flash, against Claude Code 2.1.312. The design, and how each agent behaved in the tests, are in [docs/design.md](docs/design.md). An earlier version was a Go MCP server.
 
 ## License
 

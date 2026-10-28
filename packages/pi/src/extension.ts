@@ -1,11 +1,14 @@
 // Puts Claude Code's memory index for the working directory into pi's
 // system prompt before every run, and registers tools to list another
-// directory's notes and to write and edit the working directory's. The index
-// is read again each run, so notes saved during the session show up.
+// directory's notes and to write, edit and delete the working directory's.
+// The index is read again each run, so notes saved during the session show
+// up.
 import { isAbsolute } from "node:path"
 import { Type } from "@earendil-works/pi-ai"
 import { defineTool, type ExtensionAPI } from "@earendil-works/pi-coding-agent"
 import {
+  deleteDescription,
+  deleteMemory,
   editDescription,
   editMemory,
   fileNameDescription,
@@ -89,6 +92,22 @@ export default function ccMem(pi: ExtensionAPI) {
           newFileName: params.new_file_name,
         })
         return text(result.message)
+      },
+    }),
+  )
+
+  pi.registerTool(
+    defineTool({
+      name: "memory_delete",
+      label: "Delete memory",
+      description: deleteDescription,
+      promptSnippet: "Delete a saved memory",
+      parameters: Type.Object({
+        file_name: Type.String({ description: fileNameDescription }),
+      }),
+      annotations: { readOnlyHint: false, destructiveHint: true, openWorldHint: false },
+      async execute(_toolCallId, params, _signal, _onUpdate, ctx) {
+        return text(deleteMemory({ env, project: ctx.cwd, source }, params.file_name).message)
       },
     }),
   )

@@ -1,12 +1,14 @@
 // Puts Claude Code's memory index for the plugin's directory into every
 // agent-loop request, and registers direct tools to list another
-// directory's notes and to write and edit this directory's. OpenCode loads
-// one plugin instance per directory, so its location is the sessions'
-// working directory. The index is read again for each request, so notes
-// saved during the session show up.
+// directory's notes and to write, edit and delete this directory's.
+// OpenCode loads one plugin instance per directory, so its location is the
+// sessions' working directory. The index is read again for each request, so
+// notes saved during the session show up.
 import { isAbsolute } from "node:path"
 import { Plugin } from "@opencode/plugin"
 import {
+  deleteDescription,
+  deleteMemory,
   editDescription,
   editMemory,
   fileNameDescription,
@@ -98,6 +100,21 @@ export default Plugin.define({
           }
           const edit = { oldString: old_string, newString: new_string, replaceAll: replace_all, newFileName: new_file_name }
           return { content: editMemory(write, file_name, edit).message }
+        },
+      })
+      editor.add({
+        name: "memory_delete",
+        description: deleteDescription,
+        input: {
+          type: "object",
+          properties: { file_name: fileName },
+          required: ["file_name"],
+          additionalProperties: false,
+        },
+        options: { codemode: false },
+        execute: async (input) => {
+          const { file_name } = input as { file_name: string }
+          return { content: deleteMemory(write, file_name).message }
         },
       })
     })

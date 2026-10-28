@@ -22,12 +22,12 @@ npx @cc-mem/core index --project <dir>
 
 - `resolveLocation(env, project)` resolves the memory directory as Claude Code does: the canonical git root, so worktrees share one memory; `autoMemoryDirectory` from user, local and managed settings; `CLAUDE_CONFIG_DIR`; the long-path hash. It also reports whether auto memory is turned off.
 - `memoryText(env, project, { writable })` builds what the plugins put in the prompt: where the notes are, how to treat them, and `MEMORY.md` within Claude Code's limits of 200 lines and 25,000 characters.
-- `writeMemory` and `editMemory` back the `memory_write` and `memory_edit` tools.
+- `writeMemory`, `editMemory` and `deleteMemory` back the `memory_write`, `memory_edit` and `memory_delete` tools.
   - They check Claude Code's frontmatter format.
   - They never overwrite a file on create.
-  - They copy the old version into `.cc-mem-trash` beside the memory directory before every edit.
+  - They delete one named memory file at a time, never `MEMORY.md`.
   - They record which agent wrote or changed a file.
-- `listDescription`, `writeDescription`, `editDescription` and `fileNameDescription` are the tool descriptions, shared so the tools read the same in every agent.
+- `listDescription`, `writeDescription`, `editDescription`, `deleteDescription` and `fileNameDescription` are the tool descriptions, shared so the tools read the same in every agent.
 
 Use `systemEnv()` for the environment of the current process.
 
