@@ -1,14 +1,16 @@
 // Puts Claude Code's memory index for each session's working directory into
 // DeepSeek Harness's runtime context, and registers tools to list another
-// directory's notes and to write, edit and delete the session directory's. The
-// context provider runs at each assembly, and Harness logs a new snapshot
-// only when the text changes, so notes saved during the session show up.
+// directory's notes and to write, edit and delete the session directory's.
+// Harness appends the whole runtime context to the history again whenever its
+// text changes, so, like Claude Code, each session keeps the index it started
+// with until a compaction; the tool results tell the agent what it changed.
 //
 // A Harness Host serves every Workspace from one process, so the directory
 // comes from each session (ctx.workingDirectory), never from the process.
 import { isAbsolute } from "node:path"
 import type { Context } from "@deepseek-ai/cordis"
 import type {} from "@deepseek-ai/dsh-agent"
+import type {} from "@deepseek-ai/dsh-session"
 import type {} from "@deepseek-ai/dsh-system-prompt"
 import { defineTool } from "@deepseek-ai/dsh-tools"
 import type {} from "@deepseek-ai/dsh-working-directory"
@@ -38,17 +40,34 @@ const text = { schema: { type: "string" } as const, render: (_args: unknown, val
 export function apply(ctx: Context) {
   const env = systemEnv()
 
+  // Per session id, for the directory it was read in (a session can change
+  // directory); text is "" when the index could not be read.
+  const snapshots = new Map<string, { directory: string; text: string }>()
+  ctx.on("session/event", (session, event) => {
+    // Written by dsh-compaction when a compaction finishes.
+    if ((event.type as string) === "compaction/end") snapshots.delete(session.id)
+  })
+
   ctx.systemPrompt.context({
     name: "cc-mem:index",
     order: contextOrder,
     interpolate: false,
     text: (context) => {
       if (context.agent === undefined) return ""
-      try {
-        return `<memory>\n${memoryText(env, ctx.workingDirectory.get(context.agent.session), { writable: true })}</memory>`
-      } catch {
-        return ""
+      const session = context.agent.session
+      const directory = ctx.workingDirectory.get(session)
+      let snapshot = snapshots.get(session.id)
+      if (snapshot?.directory !== directory) {
+        let text: string
+        try {
+          text = `<memory>\n${memoryText(env, directory, { writable: true })}</memory>`
+        } catch {
+          text = ""
+        }
+        snapshot = { directory, text }
+        snapshots.set(session.id, snapshot)
       }
+      return snapshot.text
     },
   })
 

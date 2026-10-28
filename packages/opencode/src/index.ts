@@ -2,8 +2,10 @@
 // agent-loop request, and registers direct tools to list another
 // directory's notes and to write, edit and delete this directory's.
 // OpenCode loads one plugin instance per directory, so its location is the
-// sessions' working directory. The index is read again for each request, so
-// notes saved during the session show up.
+// sessions' working directory. Like Claude Code, each session keeps the
+// index it started with until a compaction: the system prompt leads every
+// request, so a changed index would void the cached prefix of the whole
+// conversation. The tool results tell the agent what it changed.
 import { isAbsolute } from "node:path"
 import { Plugin } from "@opencode/plugin"
 import {
@@ -28,14 +30,22 @@ export default Plugin.define({
     const directory = ctx.location.directory
     const write = { env, project: directory, source }
 
+    // Per session; null when the index could not be read.
+    const snapshots = new Map<string, string | null>()
+    await ctx.session.hook("compaction", (event) => {
+      snapshots.delete(event.sessionID)
+    })
     await ctx.session.hook("context", (event) => {
-      let text: string
-      try {
-        text = memoryText(env, directory, { writable: true })
-      } catch {
-        return
+      let text = snapshots.get(event.sessionID)
+      if (text === undefined) {
+        try {
+          text = `<memory>\n${memoryText(env, directory, { writable: true })}</memory>`
+        } catch {
+          text = null
+        }
+        snapshots.set(event.sessionID, text)
       }
-      event.system.push({ type: "text", text: `<memory>\n${text}</memory>` })
+      if (text !== null) event.system.push({ type: "text", text })
     })
 
     const fileName = { type: "string", description: fileNameDescription }

@@ -8,7 +8,7 @@ pi install npm:@cc-mem/pi
 
 ## What it does
 
-- Puts the project's `MEMORY.md` index into the system prompt on every turn. The directory is the one Claude Code uses for the working directory, `~/.claude/projects/<project>/memory` by default.
+- Puts the project's `MEMORY.md` index into the system prompt when the session starts, and reads it again after each compaction. The directory is the one Claude Code uses for the working directory, `~/.claude/projects/<project>/memory` by default.
 - Registers four tools:
   - `memory_list(project)` returns the notes of another project directory.
   - `memory_write(file_name, content)` creates a memory file, or `MEMORY.md`, and never overwrites one.

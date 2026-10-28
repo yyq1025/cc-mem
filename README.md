@@ -7,7 +7,7 @@ Claude Code saves what it learns about you and your project to `~/.claude/projec
 ## What it does
 
 - **The same memory, read the way Claude Code reads it.** The directory is resolved as Claude Code resolves it: the canonical git root, so worktrees share one memory; `autoMemoryDirectory`; `CLAUDE_CONFIG_DIR`; the long-path hash. `MEMORY.md` is loaded within Claude Code's limits of 200 lines and 25,000 characters. Notes are written in Claude Code's own format.
-- **Loaded when the session starts.** The index goes into the system prompt on every turn, framed as background notes from earlier sessions, so the agent sees it without having to think of calling a tool.
+- **Loaded when the session starts.** The index goes into the system prompt, framed as background notes from earlier sessions, so the agent sees it without having to think of calling a tool. As in Claude Code, a session keeps the index it started with until its context is compacted, which keeps the prompt cache intact; notes other agents save meanwhile arrive after the next compaction or in the next session.
 - **Careful writes.**
   - `memory_write` creates a file and never overwrites one.
   - `memory_edit` makes one exact replacement and can rename a file.
