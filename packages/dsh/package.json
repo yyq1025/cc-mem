@@ -1,0 +1,46 @@
+{
+  "name": "@cc-mem/dsh",
+  "version": "0.1.1",
+  "description": "Claude Code's auto memory in DeepSeek Harness: the index in every request, and tools to write and edit it",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yyq1025/cc-mem.git",
+    "directory": "packages/dsh"
+  },
+  "homepage": "https://github.com/yyq1025/cc-mem#readme",
+  "bugs": "https://github.com/yyq1025/cc-mem/issues",
+  "keywords": ["dsh", "deepseek-harness", "dsh-plugin", "claude-code", "memory", "auto-memory"],
+  "type": "module",
+  "main": "./dist/index.js",
+  "files": ["dist", "cordis.patch.yml"],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "engines": {
+    "dsh": ">=0.2.1-0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "prepack": "bun run build"
+  },
+  "dependencies": {
+    "@cc-mem/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "*",
+    "@deepseek-ai/dsh-tools": ">=0.2.1-0"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "4.0.5",
+    "@deepseek-ai/dsh-agent": "0.2.1-rc.3",
+    "@deepseek-ai/dsh-system-prompt": "0.2.1-rc.3",
+    "@deepseek-ai/dsh-tools": "0.2.1-rc.3",
+    "@deepseek-ai/dsh-working-directory": "0.2.1-rc.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

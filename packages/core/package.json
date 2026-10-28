@@ -1,0 +1,35 @@
+{
+  "name": "@cc-mem/core",
+  "version": "0.1.1",
+  "description": "Shared memory for coding agents, kept in Claude Code's auto memory: directory resolution, index loading and careful writes",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yyq1025/cc-mem.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://github.com/yyq1025/cc-mem#readme",
+  "bugs": "https://github.com/yyq1025/cc-mem/issues",
+  "keywords": ["claude-code", "memory", "auto-memory", "coding-agent"],
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "bin": {
+    "cc-mem": "./dist/cli.js"
+  },
+  "files": ["dist"],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "prepack": "bun run build"
+  },
+  "dependencies": {
+    "yaml": "^2.9.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

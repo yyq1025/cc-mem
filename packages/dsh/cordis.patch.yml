@@ -1,0 +1,3 @@
+- insert:
+    - id: cc-mem
+      name: "@cc-mem/dsh"

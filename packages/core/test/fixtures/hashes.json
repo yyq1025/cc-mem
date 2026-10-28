@@ -1,0 +1,127 @@
+[
+ {
+  "input": "",
+  "djb2Hash": "0",
+  "sanitized": ""
+ },
+ {
+  "input": "a",
+  "djb2Hash": "2p",
+  "sanitized": "a"
+ },
+ {
+  "input": "ah",
+  "djb2Hash": "2ef",
+  "sanitized": "ah"
+ },
+ {
+  "input": "aho",
+  "djb2Hash": "22i0",
+  "sanitized": "aho"
+ },
+ {
+  "input": "ahov",
+  "djb2Hash": "1s5la",
+  "sanitized": "ahov"
+ },
+ {
+  "input": "ahovcjq",
+  "djb2Hash": "gx0ahw",
+  "sanitized": "ahovcjq"
+ },
+ {
+  "input": "ahovcjqx",
+  "djb2Hash": "r7gnhg",
+  "sanitized": "ahovcjqx"
+ },
+ {
+  "input": "ahovcjqxelszgnu",
+  "djb2Hash": "i3igg4",
+  "sanitized": "ahovcjqxelszgnu"
+ },
+ {
+  "input": "ahovcjqxelszgnub",
+  "djb2Hash": "7809uq",
+  "sanitized": "ahovcjqxelszgnub"
+ },
+ {
+  "input": "ahovcjqxelszgnubi",
+  "djb2Hash": "aswbg5",
+  "sanitized": "ahovcjqxelszgnubi"
+ },
+ {
+  "input": "ahovcjqxelszgnubipwdkryfmtahovc",
+  "djb2Hash": "q7eqx4",
+  "sanitized": "ahovcjqxelszgnubipwdkryfmtahovc"
+ },
+ {
+  "input": "ahovcjqxelszgnubipwdkryfmtahovcj",
+  "djb2Hash": "v1gkv6",
+  "sanitized": "ahovcjqxelszgnubipwdkryfmtahovcj"
+ },
+ {
+  "input": "ahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdk",
+  "djb2Hash": "ebikp8",
+  "sanitized": "ahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdk"
+ },
+ {
+  "input": "ahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkr",
+  "djb2Hash": "hqbhye",
+  "sanitized": "ahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkr"
+ },
+ {
+  "input": "ahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkry",
+  "djb2Hash": "ikzz3h",
+  "sanitized": "ahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkry"
+ },
+ {
+  "input": "ahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubi",
+  "djb2Hash": "7enq3g",
+  "sanitized": "ahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubi"
+ },
+ {
+  "input": "ahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubip",
+  "djb2Hash": "gj3ayc",
+  "sanitized": "ahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubip"
+ },
+ {
+  "input": "ahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipw",
+  "djb2Hash": "f821n9",
+  "sanitized": "ahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipw"
+ },
+ {
+  "input": "ahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszg",
+  "djb2Hash": "gi2d18",
+  "sanitized": "ahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszg"
+ },
+ {
+  "input": "ahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgn",
+  "djb2Hash": "ec8ub6",
+  "sanitized": "ahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgn"
+ },
+ {
+  "input": "ahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnu",
+  "djb2Hash": "icxrur",
+  "sanitized": "ahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnu"
+ },
+ {
+  "input": "ahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnub",
+  "djb2Hash": "8o6v8z",
+  "sanitized": "ahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnubipwdkryfmtahovcjqxelszgnub"
+ },
+ {
+  "input": "/Users/someone/projects/deeply/nested/deeply/nested/deeply/nested/deeply/nested/deeply/nested/deeply/nested/deeply/nested/deeply/nested/deeply/nested/deeply/nested/deeply/nested/deeply/nested/deeply/nested/deeply/nested/deeply/nested/deeply/nested/repo",
+  "djb2Hash": "ady0ng",
+  "sanitized": "-Users-someone-projects-deeply-nested-deeply-nested-deeply-nested-deeply-nested-deeply-nested-deeply-nested-deeply-nested-deeply-nested-deeply-nested-deeply-nested-deeply-nested-deeply-nested-deeply-nested-deeply-nested-deeply-nested-deeply-nested-repo"
+ },
+ {
+  "input": "/Users/someone/项目/记忆/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/子目录/",
+  "djb2Hash": "va6elq",
+  "sanitized": "-Users-someone-----------------------------------------------------------------------------------------------------------------------------------------------------------------------"
+ },
+ {
+  "input": "/home/u/emoji-😀-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+  "djb2Hash": "xcgw6w",
+  "sanitized": "-home-u-emoji----xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+ }
+]

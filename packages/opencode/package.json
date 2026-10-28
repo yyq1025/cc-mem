@@ -1,0 +1,26 @@
+{
+  "name": "@cc-mem/opencode",
+  "version": "0.1.1",
+  "description": "Claude Code's auto memory in OpenCode: the index in every request, and tools to write and edit it",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yyq1025/cc-mem.git",
+    "directory": "packages/opencode"
+  },
+  "homepage": "https://github.com/yyq1025/cc-mem#readme",
+  "bugs": "https://github.com/yyq1025/cc-mem/issues",
+  "keywords": ["opencode", "opencode-plugin", "claude-code", "memory", "auto-memory"],
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": ["src"],
+  "dependencies": {
+    "@opencode/plugin": "^2.2.0",
+    "@cc-mem/core": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

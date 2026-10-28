@@ -1,0 +1,33 @@
+{
+  "name": "@cc-mem/pi",
+  "version": "0.1.1",
+  "description": "Claude Code's auto memory in pi: the index on every turn, and tools to write and edit it",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yyq1025/cc-mem.git",
+    "directory": "packages/pi"
+  },
+  "homepage": "https://github.com/yyq1025/cc-mem#readme",
+  "bugs": "https://github.com/yyq1025/cc-mem/issues",
+  "keywords": ["pi-package", "pi", "claude-code", "memory", "auto-memory"],
+  "type": "module",
+  "pi": {
+    "extensions": ["./src/extension.ts"]
+  },
+  "files": ["src"],
+  "dependencies": {
+    "@cc-mem/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-ai": "*",
+    "@earendil-works/pi-coding-agent": "*"
+  },
+  "devDependencies": {
+    "@earendil-works/pi-ai": "1.4.0",
+    "@earendil-works/pi-coding-agent": "1.4.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
