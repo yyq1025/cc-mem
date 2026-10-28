@@ -1,0 +1,7 @@
+- [User in Oregon=US Pacific](user_location_oregon.md) — 08-10 起在俄勒冈; 截图/口头时间按 Pacific
+- [Reply in 中文](feedback_reply_in_chinese.md) — match the language
+- [Run bun install yourself (foreground)](feedback_run_bun_install_foreground.md) — 09-14 起自己跑 `bun install`, 前台+timeout
+- [Test runner=vitest](feedback_test_runner_vitest.md) — vitest from day 1, don't pitch node:test
+- [Release 1.0 on 11-15](project_release_plan.md) — feature freeze 11-01; docs site must ship with it
+- [Grafana dashboards](reference_dashboards.md) — latency and error-rate boards for the API
+- [Brand logo rules (Acme site)](reference_brand_logo_rules.md) — for the Acme marketing site: use logos unmodified, text names otherwise
