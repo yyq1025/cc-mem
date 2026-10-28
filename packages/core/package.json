@@ -1,6 +1,6 @@
 {
   "name": "@cc-mem/core",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Shared memory for coding agents, kept in Claude Code's auto memory: directory resolution, index loading and careful writes",
   "license": "MIT",
   "repository": {

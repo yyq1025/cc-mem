@@ -57,7 +57,7 @@ npx @cc-mem/core index --project <dir>
 
 ## Status
 
-Version 0.2.0, on npm under [`@cc-mem`](https://www.npmjs.com/org/cc-mem). Tested with pi 1.4.0, OpenCode 2.2.0 and DeepSeek Harness 0.2.1-rc.3 running DeepSeek V4.1 Flash, against Claude Code 2.1.312. The design, and how each agent behaved in the tests, are in [docs/design.md](docs/design.md). An earlier version was a Go MCP server.
+Version 0.2.1, on npm under [`@cc-mem`](https://www.npmjs.com/org/cc-mem). Tested with pi 1.4.0, OpenCode 2.2.0 and DeepSeek Harness 0.2.1-rc.3 running DeepSeek V4.1 Flash, against Claude Code 2.1.312. The design, and how each agent behaved in the tests, are in [docs/design.md](docs/design.md). An earlier version was a Go MCP server.
 
 ## License
 
